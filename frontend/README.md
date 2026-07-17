@@ -1,59 +1,51 @@
-# Client
+Resturant App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.6.
+## Description:
 
-## Development server
+A full-stack restaurant ordering application built with Angular, Node, Express, TypeScript, and PostgreSQL.
 
-To start a local development server, run:
+This project is a work in progress and is being developed a portfolio project to demonstrate full-stack application architecture, REST API development, relational database design, and modern frontend development.
 
-```bash
-ng serve
-```
+## Tech Stack:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Frontend
 
-## Code scaffolding
+- Angular
+- TypeScript
+- SCSS
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Backend
 
-```bash
-ng generate component component-name
-```
+- Node.js
+- Express
+- Typescript
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Database
 
-```bash
-ng generate --help
-```
+- PostgreSQL
 
-## Building
+## Planned Features:
 
-To build the project run:
+- Menu
+- Shopping Cart functionality
+- Customer order placement
+- Order History
+- User authentication and authorization
+- Customer preference saves
+- About Us Page
 
-```bash
-ng build
-```
+## Getting Started:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- install Node.js, NPM, PostgreSQL, and Angular
+- Clone Repository
+- Navigate to /backend and install dependencies
+- Create a PostgreSQL database and run the migrations in /backend/src/db/migrations/
+- CLI: npm run dev from /backend
+- CLI: npm install from /frontend
+- CLI: ng serve from /frontend
+- Open URL for local
+- Check /backend/.env.example for example of how to connect to DB
 
-## Running unit tests
+## PROJECT STATUS as of 07/16/2026
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- In active development
