@@ -1,0 +1,113 @@
+.sign-up {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-white);
+}
+.header-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.sign-up__title {
+    margin-bottom: 0px;
+}
+.sign-up__field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+.sign-up__input {
+    height: 2rem;
+    font-size: 1rem;
+    color: var(--color-white);
+    border: none;
+    border-bottom: 1px solid var(--color-white);
+    background-color: var(--color-pale-blue);
+    outline: none;
+
+    &focus {
+        border-bottom: 2px solid var(--color-white);
+    }
+}
+.sign-up__input::placeholder {
+    color: var(--color-white);
+}
+.sign-up__password {
+    margin-bottom: 0;
+}
+.password-hint {
+    margin-bottom: 1rem;
+}
+.personal-info {
+    flex-direction: column;
+}
+.personal-info__row {
+    display: flex;
+    flex-direction: row;
+}
+.personal-info__column {
+    display: flex;
+    flex-direction: column;
+}
+.sign-up__phone {
+    margin-right: 1rem;
+}
+.sign-up__agreement {
+    margin-bottom: 1rem;
+}
+.sign-up__agreement-row{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.sign-up__agreement-input {
+    appearance: none;
+    border: 1px solid var(--color-white);
+    border-radius: 0;
+    flex-shrink: 0;
+    background-color: transparent;
+    display: grid;
+    place-content: center;
+    height: 1.25rem;
+    width: 1.25rem;
+    margin: 0;
+    cursor: pointer;
+}
+.sign-up__agreement-input:checked {
+    background-color: var(--color-white);
+}
+.sign-up__agreement-input::after {
+    content: '';
+    width: .4rem;
+    height: .7rem;
+    border:solid var(--color-primary);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+
+    position: relative;
+    top: -0.15rem;
+    left: .05rem;
+}
+.sign-up__agreement-input:checked::after {
+    transform: rotate(45deg) scale(1);
+}
+.sign-up__agreement-label {
+    display: flex;
+    align-items: center;
+}
+.form-error {
+    color: var(--color-warning);
+}
+.password-requirements {
+    margin: 0;
+    padding-left: 1.25rem;
+
+    li {
+        color: var(--color-warning);
+    }
+
+    li.valid {
+        color: var(--color-success);
+    }
+}

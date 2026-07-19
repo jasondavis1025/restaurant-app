@@ -1,0 +1,28 @@
+.footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 2rem;
+
+    padding: 3rem 0;
+}
+.footer__message {
+    p {
+        margin: 0;
+
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: .95;
+    }
+}
+
+.footer__social {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    a {
+        color: var(--color-primary);
+        font-size: 1.5rem;
+    }
+}

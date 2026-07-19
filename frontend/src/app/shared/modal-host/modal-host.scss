@@ -1,0 +1,27 @@
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(0 0 0 / 50%);
+    z-index: 1000;
+}
+.modal-backdrop__close {
+    position: absolute;
+    inline-size: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: default;
+}
+.modal {
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-pale-blue);
+    border-radius: 1rem;
+    padding: 2rem;
+    width: min(90vw, 30rem);
+}

@@ -1,1 +1,25 @@
-<p>header works!</p>
+<header class="header">
+  <a class="header__brand" routerLink="/">
+    <fa-icon [icon]="faUtensils"></fa-icon>
+    <span>Demo Restaurant</span>
+  </a>
+  <nav class="header_nav">
+    <a class="header__nav-link" routerLink="/menu" routerLinkActive="header__nav-link--active"
+      >Menu</a
+    >
+    <a class="header__nav-link" routerLink="/about" routerLinkActive="header__nav-link--active"
+      >About</a
+    >
+    <a class="header__nav-link header_nav-link-last" href="mailto:your-email@example.com"
+      >Contact Us</a
+    >
+    <app-button routerLink="/menu">Order Now</app-button>
+  </nav>
+  <div class="header__actions">
+    <fa-icon [icon]="faBagShopping"></fa-icon>
+    <app-button variant="account" (click)="modalService.open('sign-in')">
+      <img src="/icons/person.svg" alt="" />
+      <span>Sign In/Join</span>
+    </app-button>
+  </div>
+</header>

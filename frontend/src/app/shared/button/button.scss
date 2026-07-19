@@ -1,0 +1,30 @@
+button {
+    color: var(--color-white);
+    cursor: pointer;
+    background-color: var(--color-primary);
+    min-width: 5.5rem;
+    height: 2rem;
+    padding: 0 1rem;
+    border: none;
+    border-radius: .5rem;
+    font-size: .875rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+@media (max-width: 768px) {
+    button {
+        min-width: 7rem;
+        height: 2.75rem;
+        padding: 0 1rem;
+    }
+}
+.button--secondary {
+    background-color: var(--color-secondary);
+}
+.button--account {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+}

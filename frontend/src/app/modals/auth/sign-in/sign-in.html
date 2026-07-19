@@ -1,1 +1,50 @@
-<p>sign-in works!</p>
+<form class="sign-in" [formGroup]="signInForm" (ngSubmit)="signIn()">
+  <div class="header-area">
+    <h2>Sign in to earn points for rewards.</h2>
+    <small>*Required information</small>
+  </div>
+  <!-- <label for="email">Email</label>
+  <input type="email" id="email" name="email" autocomplete="username" />
+
+  <label for="password">Password</label>
+  <input id="password" type="password" name="password" autocomplete="current-password" /> -->
+  <div class="sign-in__field">
+    <label for="email" class="visually-hidden">Email</label>
+    <input
+      class="sign-in__input"
+      type="email"
+      id="email"
+      formControlName="email"
+      autocomplete="email"
+      placeholder="Email Address*"
+    />
+    @if (submitted && signInForm.controls.email.hasError('required')) {
+      <small class="form-error">Email is required</small>
+    }
+    @if (submitted && signInForm.controls.email.hasError('pattern')) {
+      <small class="form-error">Please enter a valid email address.</small>
+    }
+  </div>
+
+  <div class="sign-in__field">
+    <label for="password" class="visually-hidden">Password</label>
+    <input
+      class="sign-in__input"
+      id="password"
+      type="password"
+      formControlName="password"
+      autocomplete="current-password"
+      placeholder="Password*"
+    />
+    @if (submitted && signInForm.controls.password.hasError('required')) {
+      <small class="form-error">Password is required.</small>
+    }
+  </div>
+
+  <a class="sign-in__forgot" routerLink="/" (click)="modalService.close()">Forgot Password?</a>
+  <small class="sign-in__requirement-text">You must be logged in to place an order.</small>
+  <div class="sign-in__actions">
+    <app-button type="submit">Sign In</app-button>
+    <app-button type="button" variant="account" (click)="openSignUp($event)">Join Now</app-button>
+  </div>
+</form>

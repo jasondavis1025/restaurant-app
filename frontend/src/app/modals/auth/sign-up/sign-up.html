@@ -1,1 +1,153 @@
-<p>sign-up works!</p>
+<form class="sign-up" [formGroup]="signUpForm" (ngSubmit)="join()">
+  <div class="header-area">
+    <h2 class="sign-up__title">CREATE YOUR PROFILE</h2>
+    <p>*Required information</p>
+  </div>
+
+  <div class="sign-up__field">
+    <label for="firstName" class="visually-hidden">First Name</label>
+    <input
+      class="sign-up__input"
+      type="text"
+      id="firstName"
+      formControlName="firstName"
+      autocomplete="given-name"
+      placeholder="First Name*"
+    />
+    @if (submitted && signUpForm.controls.firstName.hasError('required')) {
+      <small class="form-error">First Name is required</small>
+    }
+  </div>
+
+  <div class="sign-up__field">
+    <label for="lastName" class="visually-hidden">Last Name</label>
+    <input
+      class="sign-up__input"
+      type="text"
+      id="lastName"
+      formControlName="lastName"
+      autocomplete="family-name"
+      placeholder="Last Name*"
+    />
+    @if (submitted && signUpForm.controls.lastName.hasError('required')) {
+      <small class="form-error">Last Name is required</small>
+    }
+  </div>
+
+  <div class="sign-up__field">
+    <label for="email" class="visually-hidden">Email</label>
+    <input
+      class="sign-up__input"
+      type="email"
+      id="email"
+      formControlName="email"
+      autocomplete="email"
+      placeholder="Email Address*"
+    />
+    @if (submitted && signUpForm.controls.email.hasError('required')) {
+      <small class="form-error">Email is required</small>
+    }
+    @if (submitted && signUpForm.controls.email.hasError('pattern')) {
+      <small class="form-error">Please enter a valid email address.</small>
+    }
+  </div>
+
+  <div class="sign-up__field">
+    <label for="password" class="visually-hidden">Password</label>
+    <input
+      class="sign-up__input"
+      id="password"
+      type="password"
+      formControlName="password"
+      autocomplete="new-password"
+      placeholder="Password*"
+    />
+    <small class="password-hint">
+      Passwords must have at least 8 characters, including: one lowercase letter, one uppercase
+      letter, one number, and one special character.
+    </small>
+    @if (submitted && signUpForm.controls.password.invalid) {
+      <ul class="password-requirements">
+        <li [class.valid]="passwordValue.length >= 8">At least 8 characters</li>
+        <li [class.valid]="/[A-Z]/.test(passwordValue)">One uppercase letter</li>
+        <li [class.valid]="/[a-z]/.test(passwordValue)">One lowercase letter</li>
+        <li [class.valid]="/[\d]/.test(passwordValue)">One number</li>
+        <li [class.valid]="/[^A-Za-z0-9]/.test(passwordValue)">One special character</li>
+      </ul>
+    }
+    <!-- password requires 8 characters, one lowercase letter, one uppercase letter, one number, and one special character -->
+  </div>
+
+  <div class="personal-info">
+    <div class="personal-info__row sign-up__field">
+      <div class="personal-info__column">
+        <label for="phone" class="visually-hidden">Phone Number</label>
+        <input
+          id="phone"
+          class="sign-up__input sign-up__phone"
+          type="tel"
+          formControlName="phone"
+          autocomplete="tel"
+          placeholder="Phone Number*"
+          (input)="formatPhone($event)"
+        />
+        @if (submitted && signUpForm.controls.phone.hasError('required')) {
+          <small class="form-error">Phone Number is required</small>
+        }
+      </div>
+      <div class="personal-info__column">
+        <label for="zipCode" class="visually-hidden">Zip Code</label>
+        <input
+          id="zipCode"
+          class="sign-up__input"
+          type="text"
+          formControlName="zipCode"
+          autocomplete="postal-code"
+          placeholder="Zip Code*"
+        />
+        @if (submitted && signUpForm.controls.zipCode.hasError('required')) {
+          <small class="form-error">ZIP Coode is required</small>
+        }
+        @if (submitted && signUpForm.controls.zipCode.hasError('pattern')) {
+          <small class="form-error">Enter a valid ZIP code</small>
+        }
+      </div>
+    </div>
+    <div class="personal-info__column sign-up__field">
+      <label for="birthday" class="visually-hidden">birthday</label>
+      <input
+        id="birthday"
+        class="sign-up__input"
+        type="date"
+        formControlName="birthday"
+        autocomplete="bday"
+        placeholder="When's your birthday (MM/DD/YYYY)*"
+      />
+      <small>Get a reward every year on your birthday!</small>
+      @if (submitted && signUpForm.controls.birthday.hasError('required')) {
+        <small class="form-error">Birthday is required</small>
+      }
+    </div>
+  </div>
+  <div class="sign-up__agreement">
+    <div class="sign-up__agreement-row">
+      <input
+        id="termsAccepted"
+        class="sign-up__agreement-input"
+        type="checkbox"
+        formControlName="termsAccepted"
+      />
+      <label class="sign-up__agreement-label" for="termsAccepted">
+        I agree to Demo Restaurant's Terms of Use, Privacy Policy, Notice at Collection, Reward
+        Terms, and Notice of Financial Incentives.*
+      </label>
+    </div>
+    @if (submitted && signUpForm.controls.termsAccepted.invalid) {
+      <small class="form-error">You must accept the terms to create an account.</small>
+    }
+  </div>
+
+  <div class="sign-up__actions">
+    <app-button type="submit" variant="secondary">Join Now</app-button>
+  </div>
+</form>

@@ -1,1 +1,24 @@
-<p>modal-host works!</p>
+@if (modalService.activeModal() !== null) {
+  <div class="modal-backdrop">
+    <button
+      type="button"
+      class="modal-backdrop__close"
+      (click)="modalService.close()"
+      aria-label="Close Modal"
+    >
+      <span class="visually-hidden">Close Modal</span>
+    </button>
+
+    <div class="modal">
+      @if (modalService.activeModal() === 'sign-in') {
+        <app-sign-in />
+      }
+      @if (modalService.activeModal() === 'sign-up') {
+        <app-sign-up />
+      }
+      @if (modalService.activeModal() === 'cart') {
+        <app-cart-modal />
+      }
+    </div>
+  </div>
+}
