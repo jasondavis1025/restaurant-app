@@ -1,0 +1,85 @@
+.menu__tabs {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-bottom: 3rem;
+}
+
+.menu__tab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .35rem;
+    width: min(22rem, 45vw);
+    padding: 1rem 0.5rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-primary);
+    font-weight: 700;
+    cursor: pointer;
+    &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        bottom: 0;
+
+        width: 36%;
+        height: 2px;
+
+        background-color: transparent;
+    }
+
+    &--active::after {
+        background-color: var(--color-bright-blue);
+    }
+}
+
+.menu__tab-title {
+    position: relative;
+    padding-bottom: 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.menu__tab-hours {
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.menu__category {
+    margin-bottom: 3rem;
+}
+
+.menu__items {
+    display: grid;
+    grid-template-columns: repeat(4, 200px);
+    gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .menu__items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .menu__items {
+        grid-template-columns: 1fr;
+    }
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-item__image {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 1rem;
+}
