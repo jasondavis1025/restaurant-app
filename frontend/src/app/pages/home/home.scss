@@ -1,0 +1,9 @@
+.home__img-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    img {
+        object-fit: cover;
+    }
+}
