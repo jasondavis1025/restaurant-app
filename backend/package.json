@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "tsx src/scripts/seed.ts",
     "migrate": "tsx src/scripts/migrate.ts",
+    "migrate:up": "tsx src/scripts/migrate.ts",
     "migrate:down": "tsx src/scripts/migrate-down.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
