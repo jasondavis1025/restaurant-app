@@ -20,8 +20,27 @@
 .modal {
     position: relative;
     z-index: 1;
+}
+.modal--account {
     background-color: var(--color-pale-blue);
     border-radius: 1rem;
     padding: 2rem;
     width: min(90vw, 30rem);
+}
+.modal--menu-item {
+    width: min(90vw, 40rem);
+    padding: 3rem;
+    min-height: min(70vh, 30rem);
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border-radius: 1rem;
+    height: 35rem;
+}
+.modal--cart {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(100%, 28rem);
+    height: 100vw;
+    background-color: var(--color-white);
 }

@@ -41,6 +41,7 @@
     padding-bottom: 0.25rem;
     font-size: 1.5rem;
     font-weight: 700;
+    height: 3rem;
 }
 
 .menu__tab-hours {
@@ -51,35 +52,11 @@
 .menu__category {
     margin-bottom: 3rem;
 }
-
+.menu__category-title {
+    color: var(--color-primarys)
+}
 .menu__items {
     display: grid;
-    grid-template-columns: repeat(4, 200px);
+    grid-template-columns: repeat(4, 230px);
     gap: 1.5rem;
-}
-
-@media (max-width: 900px) {
-    .menu__items {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 600px) {
-    .menu__items {
-        grid-template-columns: 1fr;
-    }
-}
-
-.menu-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.menu-item__image {
-    display: block;
-    width: 100%;
-    max-width: 200px;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 1rem;
 }

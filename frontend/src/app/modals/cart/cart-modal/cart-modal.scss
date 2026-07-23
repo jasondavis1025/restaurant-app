@@ -1,0 +1,16 @@
+.cart-modal {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-modal__header {
+    padding: 1.5rem;
+    background-color: var(--color-secondary);
+}
+
+.cart-modal__body {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: var(--color-white);
+}

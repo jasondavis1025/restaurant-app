@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
+import { MenuItem as MenuItemModel } from '../../../models/menu.types';
+import { ModalService } from '../../../core/services/modal';
 
 @Component({
   selector: 'app-cart-modal',

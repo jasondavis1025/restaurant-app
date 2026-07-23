@@ -9,16 +9,25 @@
       <span class="visually-hidden">Close Modal</span>
     </button>
 
-    <div class="modal">
-      @if (modalService.activeModal() === 'sign-in') {
+    @if (modalService.activeModal() === 'sign-in') {
+      <div class="modal modal--account">
         <app-sign-in />
-      }
-      @if (modalService.activeModal() === 'sign-up') {
+      </div>
+    }
+    @if (modalService.activeModal() === 'sign-up') {
+      <div class="modal modal--account">
         <app-sign-up />
-      }
-      @if (modalService.activeModal() === 'cart') {
+      </div>
+    }
+    @if (modalService.activeModal() === 'menu-item') {
+      <div class="modal modal--menu-item">
+        <app-menu-item-modal />
+      </div>
+    }
+    @if (modalService.activeModal() === 'cart') {
+      <div class="modal modal--cart">
         <app-cart-modal />
-      }
-    </div>
+      </div>
+    }
   </div>
 }

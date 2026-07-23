@@ -1,0 +1,39 @@
+@if (modalService.selectedMenuItem(); as item) {
+  <section class="menu-item-modal">
+    <div class="menu-item-modal__image-area">
+      @if (item.imageUrl) {
+        <img [src]="item.imageUrl" [alt]="item.name" class="menu-item-modal__image" />
+      }
+    </div>
+    <div class="menu-item-modal__details">
+      <h2>{{ item.name }}</h2>
+
+      @if (item.description) {
+        <p>{{ item.description }}</p>
+      }
+
+      <p>{{ item.basePrice | currency: 'USD' }}</p>
+      <app-button type="button" (click)="addToCart()"> Add to Cart </app-button>
+    </div>
+    <div class="menu-item-modal__customizations">
+      <h3>CUSTOMIZATIONS</h3>
+      <!-- <label> <input type="checkbox" /> No onions </label> -->
+      @for (customization of item.customizations; track customization.id) {
+        <label for="">
+          <input type="checkbox" />
+
+          {{ customization.modifierType }}
+          {{ customization.ingredientName }}
+
+          @if (customization.priceAdjustment > 0) {
+            <span> +{{ customization.priceAdjustment | currency }} </span>
+          }
+        </label>
+      }
+    </div>
+    <div class="menu-item-modal__instructions">
+      <label for="addionalInstructions"> Additional Instructions </label>
+      <textarea name="addionalInstructions" id="addionalInstructions" rows="5"></textarea>
+    </div>
+  </section>
+}

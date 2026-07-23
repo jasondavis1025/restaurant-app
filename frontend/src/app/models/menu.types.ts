@@ -5,6 +5,7 @@ export interface MenuItem {
   itemType: string;
   basePrice: number;
   imageUrl: string | null;
+  customizations: MenuItemCustomization[];
 }
 
 export interface MenuCategory {
@@ -22,4 +23,11 @@ export interface MenuSection {
   allowsPreorder: boolean;
   orderAheadDays: number;
   categories: MenuCategory[];
+}
+export interface MenuItemCustomization {
+  id: string;
+  ingredientId: string;
+  ingredientName: string;
+  modifierType: string;
+  priceAdjustment: number;
 }
