@@ -5,6 +5,7 @@ export interface MenuItem {
   itemType: string;
   basePrice: number;
   imageUrl: string | null;
+  menuSlug: 'morning' | 'late-night';
   customizations: MenuItemCustomization[];
 }
 

@@ -107,6 +107,7 @@ export async function getMenu(_req: Request, res: Response): Promise<void> {
                 itemType: string;
                 basePrice: number;
                 imageUrl: string | null;
+                menuSlug: "morning" | "late-night";
                 customizations: {
                   id: string;
                   ingredientId: string;
@@ -162,6 +163,7 @@ export async function getMenu(_req: Request, res: Response): Promise<void> {
               itemType: row.item_type,
               basePrice: Number(row.item_price),
               imageUrl: row.item_image_url,
+              menuSlug: row.menu_slug,
               customizations: [],
             });
           }

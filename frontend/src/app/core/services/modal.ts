@@ -1,5 +1,5 @@
 import { Service, signal } from '@angular/core';
-import type { ModalType } from '../models/modals.types';
+import type { ModalType } from '../../models/modals.types';
 import { MenuItem as MenuItemModel } from '../../models/menu.types';
 
 @Service()

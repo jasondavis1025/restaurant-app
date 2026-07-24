@@ -19,12 +19,13 @@
       <h3>CUSTOMIZATIONS</h3>
       <!-- <label> <input type="checkbox" /> No onions </label> -->
       @for (customization of item.customizations; track customization.id) {
-        <label for="">
-          <input type="checkbox" />
-
-          {{ customization.modifierType }}
-          {{ customization.ingredientName }}
-
+        <label [for]="customization.ingredientName">
+          <input
+            type="checkbox"
+            [id]="customization.ingredientName"
+            (change)="toggleCustomization(customization)"
+          />
+          {{ customization.modifierType }} {{ customization.ingredientName }}
           @if (customization.priceAdjustment > 0) {
             <span> +{{ customization.priceAdjustment | currency }} </span>
           }
@@ -32,8 +33,13 @@
       }
     </div>
     <div class="menu-item-modal__instructions">
-      <label for="addionalInstructions"> Additional Instructions </label>
-      <textarea name="addionalInstructions" id="addionalInstructions" rows="5"></textarea>
+      <label for="additionalInstructions"> Additional Instructions </label>
+      <textarea
+        id="additionalInstructions"
+        name="additionalInstructions"
+        rows="5"
+        (input)="updateInstructions($event)"
+      ></textarea>
     </div>
   </section>
 }
