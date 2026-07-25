@@ -49,9 +49,11 @@ export class MenuItemModal {
     );
     return item.basePrice + customizationTotal;
   });
-
+  //update this for modifying an item
   addToCart(): void {
     const item = this.modalService.selectedMenuItem();
+    const editingItem = this.modalService.editingCartItem();
+
     if (!item) return;
     console.log({
       item,
@@ -62,13 +64,18 @@ export class MenuItemModal {
       cartItemId: crypto.randomUUID(),
       menuItemId: item.id,
       menuSlug: item.menuSlug,
+      menuItem: item,
       name: item.name,
       basePrice: item.basePrice,
-      quantity: 1,
+      quantity: editingItem?.quantity ?? 1,
       customizations: this.selectedCustomizations(),
       additionalInstructions: this.additionalInstructions(),
       totalPrice: this.totalPrice(),
     };
+    if (editingItem) {
+      this.cartService.removeItem(editingItem.cartItemId);
+    }
+
     this.cartService.addItem(customizedItem);
     this.modalService.open('cart');
   }

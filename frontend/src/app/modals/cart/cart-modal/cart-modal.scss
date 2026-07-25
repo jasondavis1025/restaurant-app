@@ -6,18 +6,98 @@
 
 .cart-modal__header {
     padding: 1.5rem;
-    background-color: var(--color-secondary);
+    background-color: var(--color-tertiary);
 }
 
 .cart-modal__body {
     flex: 1;
     padding: 1.5rem;
     background-color: var(--color-white);
+    min-height: 0;
+    overflow-y: auto;
 }
 .cart-modal__summary {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     margin-top: 2rem;
     padding-top: 1rem;
     border-top: 1px solid var(--color-light-gray);
+    min-height: 9rem;
+    padding: 1.5rem;
+    font-size: 1.25rem;
+}
+.cart-modal__summary-info {
+    display: flex;
+    justify-content: space-between;
+}
+.cart-modal__summary-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    min-height: 10rem;
+    margin-bottom: 4rem;
+    gap: 1.5rem;
+}
+.cart-item__ordering {
+    display: flex;
+    min-width: 120px;
+}
+.cart-item__ordering-selections {
+    padding: .5rem 1rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-light-gray);
+    box-shadow: none;
+    appearance: none;
+    cursor: pointer;
+    border-radius: .5rem;
+}
+.cart-item__dish-price {
+    margin-top: 0;
+    padding: .5rem 1rem;
+}
+.cart-item__description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.cart-item__description-title {
+    margin-top: 0px;
+    p {
+        margin-bottom: 0px;
+    }
+}
+.cart-item__additional-instructions {
+    margin-bottom: 0px;
+}
+.cart-item__interactions {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.cart-item__buttons {
+    display: flex;
+    gap: 1rem;
+}
+.cart-item__action {
+    background: none;
+    border: none;
+    padding: 0;
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    cursor: pointer;
+}
+
+.cart-item__action:hover {
+    opacity: .75;
+}
+
+.cart-item__action:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }

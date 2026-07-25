@@ -3,6 +3,7 @@ import { CartItem, CartState } from '../../models/cart.types';
 
 @Service()
 export class CartService {
+  readonly maxItemQuantity = 25;
   readonly items = signal<CartItem[]>([]);
   readonly cart = signal<CartState>({
     menuSlug: null,
@@ -48,7 +49,7 @@ export class CartService {
           existingItem.cartItemId === matchingItem.cartItemId
             ? {
                 ...existingItem,
-                quantity: existingItem.quantity + 1,
+                quantity: Math.min(existingItem.quantity + item.quantity, this.maxItemQuantity),
               }
             : existingItem,
         ),
@@ -65,37 +66,27 @@ export class CartService {
     return true;
   }
 
+  updateItem(cartItemId: string, updatedItem: CartItem): void {
+    this.cart.update((cart) => ({
+      ...cart,
+      items: cart.items.map((item) => (item.cartItemId === cartItemId ? updatedItem : item)),
+    }));
+  }
+
   updateQuantity(cartItemId: string, quantity: number): void {
+    const safeQuantity = Math.min(Math.max(quantity, 1), this.maxItemQuantity);
+
     this.cart.update((cart) => ({
       ...cart,
       items: cart.items.map((item) =>
-        item.cartItemId === cartItemId ? { ...item, quantity } : item,
+        item.cartItemId === cartItemId ? { ...item, quantity: safeQuantity } : item,
       ),
     }));
   }
-  //   increaseQuantity(cartItemId: string): void {
-  //     this.cart.update((cart) => ({
-  //       ...cart,
-  //       items: cart.items.map((item) =>
-  //         item.cartItemId === cartItemId ? { ...item, quantity: item.quantity + 1 } : item,
-  //       ),
-  //     }));
-  //   }
 
-  //   decreaseQuantity(cartItemId: string): void {
-  //     this.cart.update((cart) => {
-  //       const items = cart.items
-  //         .map((item) =>
-  //           item.cartItemId === cartItemId ? { ...item, quantity: item.quantity - 1 } : item,
-  //         )
-  //         .filter((item) => item.quantity > 0);
-
-  //       return {
-  //         menuSlug: items.length === 0 ? null : cart.menuSlug,
-  //         items,
-  //       };
-  //     });
-  //   }
+  modifyItem(cartItemId: string): void {
+    console.log('modify', cartItemId);
+  }
 
   removeItem(cartItemId: string): void {
     this.cart.update((cart) => {

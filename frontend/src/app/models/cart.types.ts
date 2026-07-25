@@ -1,4 +1,4 @@
-import { MenuItemCustomization } from './menu.types';
+import { MenuItem, MenuItemCustomization } from './menu.types';
 
 export type CartMenuSlug = 'morning' | 'late-night';
 
@@ -12,6 +12,7 @@ export interface CartItem {
   customizations: MenuItemCustomization[];
   additionalInstructions: string;
   totalPrice: number;
+  menuItem: MenuItem;
 }
 
 export interface CartState {

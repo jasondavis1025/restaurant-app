@@ -5,49 +5,74 @@
   <div class="cart-modal__body">
     @for (item of cartService.cart().items; track item.cartItemId) {
       <article class="cart-item">
-        <h3>{{ item.name }}</h3>
+        <div class="cart-item__description">
+          <h3 class="cart-item__description-title">{{ item.name }}</h3>
+          @if (item.customizations.length > 0) {
+            <ul>
+              @for (customization of item.customizations; track customization.id) {
+                <li>
+                  {{ customization.modifierType }}{{ customization.ingredientName }}
+                  @if (customization.priceAdjustment > 0) {
+                    (+{{ customization.priceAdjustment | currency: 'USD' }})
+                  }
+                </li>
+              }
+            </ul>
+          }
+          @if (item.additionalInstructions) {
+            <p class="cart-item__additional-instructions">{{ item.additionalInstructions }}</p>
+          }
+        </div>
 
-        <p>{{ item.totalPrice | currency: 'USD' }}</p>
-
-        <!-- <div class="cart-item__quantity">
-          <button type="button" (click)="cartService.decreaseQuantity(item.cartItemId)">-</button>
-          <span>{{ item.quantity }}</span>
-          <button type="button" (click)="cartService.increaseQuantity(item.cartItemId)">+</button>
-        </div> -->
-        <label>
-          Quantity
-          <select [value]="item.quantity" (change)="onQuantityChange(item.cartItemId, $event)">
-            @for (quantity of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track quantity) {
-              <option [value]="quantity" [selected]="quantity === item.quantity">
-                {{ quantity }}
-              </option>
-            }
-          </select>
-        </label>
-        <button type="button" (click)="cartService.removeItem(item.cartItemId)">Remove</button>
-
-        @if (item.customizations.length > 0) {
-          <ul>
-            @for (customization of item.customizations; track customization.id) {
-              <li>
-                {{ customization.modifierType }}{{ customization.ingredientName }}
-                @if (customization.priceAdjustment > 0) {
-                  (+{{ customization.priceAdjustment | currency: 'USD' }})
+        <div class="cart-item__interactions">
+          <div class="cart-item__ordering">
+            <label>
+              <select
+                [value]="item.quantity"
+                class="cart-item__ordering-selections"
+                (change)="onQuantityChange(item.cartItemId, $event)"
+              >
+                @for (
+                  quantity of [
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                    23, 24, 25,
+                  ];
+                  track quantity
+                ) {
+                  <option [value]="quantity" [selected]="quantity === item.quantity">
+                    {{ quantity }}
+                  </option>
                 }
-              </li>
-            }
-          </ul>
-        }
-        @if (item.additionalInstructions) {
-          <p>{{ item.additionalInstructions }}</p>
-        }
+              </select>
+            </label>
+            <p class="cart-item__dish-price">{{ item.totalPrice | currency: 'USD' }}</p>
+          </div>
+          <div class="cart-item__buttons">
+            <button type="button" class="cart-item__action" (click)="modifyItem(item)">
+              Modify
+            </button>
+            <button
+              type="button"
+              class="cart-item__action"
+              (click)="cartService.removeItem(item.cartItemId)"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
       </article>
     } @empty {
       <p>Your Cart is empty.</p>
     }
   </div>
   <div class="cart-modal__summary">
-    <span>{{ cartService.itemCount() }} items</span>
-    <strong>Subtotal: {{ cartService.subtTotal() | currency: 'USD' }}</strong>
+    <div class="cart-modal__summary-info">
+      <span>{{ cartService.itemCount() }} item(s)</span>
+      <strong>Bag Total: {{ cartService.subtTotal() | currency: 'USD' }}</strong>
+    </div>
+    <div class="cart-modal__summary-buttons">
+      <app-button variant="secondary" click="modalService.close()"> Add More Items </app-button>
+      <app-button (click)="checkout()"> Checkout </app-button>
+    </div>
   </div>
 </section>
