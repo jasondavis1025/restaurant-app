@@ -12,7 +12,7 @@ export class CartService {
   readonly itemCount = computed(() =>
     this.cart().items.reduce((count, item) => count + item.quantity, 0),
   );
-  readonly subtTotal = computed(() =>
+  readonly subTotal = computed(() =>
     this.cart().items.reduce((total, item) => total + item.totalPrice * item.quantity, 0),
   );
 

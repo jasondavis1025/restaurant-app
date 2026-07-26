@@ -1,5 +1,5 @@
 import { Service, signal } from '@angular/core';
-import type { ModalType } from '../../models/modals.types';
+import type { AuthIntent, ModalType } from '../../models/modals.types';
 import type { MenuItem as MenuItemModel } from '../../models/menu.types';
 import type { CartItem } from '../../models/cart.types';
 
@@ -8,6 +8,7 @@ export class ModalService {
   readonly activeModal = signal<ModalType | null>(null);
   readonly selectedMenuItem = signal<MenuItemModel | null>(null);
   readonly editingCartItem = signal<CartItem | null>(null);
+  readonly authIntent = signal<AuthIntent>('default');
 
   openMenuItem(item: MenuItemModel) {
     this.selectedMenuItem.set(item);
@@ -17,7 +18,10 @@ export class ModalService {
   open(modal: ModalType): void {
     this.activeModal.set(modal);
   }
-
+  openSignIn(intent: AuthIntent = 'default'): void {
+    this.authIntent.set(intent);
+    this.activeModal.set('sign-in');
+  }
   close(): void {
     this.activeModal.set(null);
     this.selectedMenuItem.set(null);

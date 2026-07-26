@@ -1,1 +1,132 @@
-<p>checkout works!</p>
+<main class="checkout">
+  <h1 class="checkout__title">Checkout</h1>
+  <section class="checkout__section">
+    <h2>Pickup Details</h2>
+
+    <div class="checkout__store-details">
+      <div>
+        <h3>Cafe Samui</h3>
+        <p>123 Restaurant Street</p>
+        <p>Your City, CA 1234</p>
+      </div>
+
+      <label for="pickup" class="checkout__field">
+        <span>Pickup Day</span>
+
+        <select
+          name="pickup"
+          id="pickup"
+          class="checkout__select"
+          (change)="updatePickupDate($event)"
+        >
+          @for (date of pickupDates; track date.toISOString(); let i = $index) {
+            <option
+              [value]="date.toISOString()"
+              [selected]="date.getDate() === selectedPickupDate().getDate()"
+            >
+              @if (i === 0) {
+                Today,
+              }
+              {{ date | date: 'EEE, MMM d' }}
+            </option>
+          }
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <section class="checkout__section">
+    <div class="checkout__section-header">
+      <h2>Contact Info</h2>
+      <button class="checkout__edit" type="button" (click)="toggleContactEdit()">
+        {{ isEditingContact() ? 'Done' : 'Edit' }}
+      </button>
+    </div>
+
+    @if (isEditingContact()) {
+      <div class="checkout__contact-form">
+        <label for="name" class="checkout__field">
+          <span>Name</span>
+          <input id="name" type="text" [value]="name()" (input)="updateName($event)" />
+        </label>
+
+        <label for="phone" class="checkout__field">
+          <span>Phone</span>
+
+          <input id="phone" type="tel" [value]="phone()" (input)="updatePhone($event)" />
+        </label>
+
+        <label for="email" class="checkout__field">
+          <span>Email</span>
+
+          <input id="email" type="email" [value]="email()" (input)="updateEmail($event)" />
+        </label>
+      </div>
+    } @else {
+      <div class="checkout__contact-summary">
+        <p>{{ name() }}</p>
+        <p>{{ phone() }}</p>
+        <p>{{ email() }}</p>
+      </div>
+    }
+  </section>
+
+  <section class="checkout__section">
+    <h2>Order Summary</h2>
+
+    <div class="checkout__order-items">
+      @for (item of cartService.cart().items; track item.cartItemId) {
+        <article class="checkout__order-item">
+          <div class="checkout__order-item-info">
+            <div class="checkout__order-item-heading">
+              <span>{{ item.quantity }}x</span>
+              <span>{{ item.name }}</span>
+            </div>
+            @for (customization of item.customizations; track customization.id) {
+              <small>{{ customization.ingredientName }}</small>
+            }
+            @if (item.additionalInstructions) {
+              <small>{{ item.additionalInstructions }}</small>
+            }
+          </div>
+
+          <span>{{ item.totalPrice | currency }} ea</span>
+        </article>
+      }
+    </div>
+
+    <div class="checkout__totals">
+      <div>
+        <span>Subtotal</span>
+        <span>{{ cartService.subTotal() | currency }}</span>
+      </div>
+
+      <div>
+        <span>Tax</span>
+        <span>{{ tax() | currency }}</span>
+      </div>
+      <div class="checkout__total">
+        <span>Total</span>
+        <span>
+          {{ total() | currency }}
+        </span>
+      </div>
+    </div>
+  </section>
+  <section class="checkout__section">
+    <h2>Payment</h2>
+    <button class="checkout__payment-toggle" type="button" (click)="togglePayment()">
+      <span class="checkout__payment-icon">
+        {{ paymentExpanded() ? '-' : '+' }}
+      </span>
+      <span>Add Payment Method</span>
+    </button>
+
+    @if (paymentExpanded()) {
+      <div class="checkout__payment-form">
+        <p>Payment fields will go here.</p>
+      </div>
+    }
+  </section>
+  <app-button>Place Order</app-button>
+</main>

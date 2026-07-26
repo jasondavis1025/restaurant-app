@@ -11,9 +11,20 @@
 }
 app-root {
     display: block;
-    padding: 2rem 3rem;
     // background-color: gray;
     min-height: 50vw;
+}
+app-main-layout {
+    padding: 2rem 3rem;
+    display: block;
+}
+app-checkout-layout {
+    padding: 2rem 3rem;
+    display: block;
+    background-color: var(--color-tertiary);
+}
+body {
+    margin: 0;
 }
 
 .visually-hidden {

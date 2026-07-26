@@ -4,7 +4,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { CartItem } from '../../../models/cart.types';
 import { ModalService } from '../../../core/services/modal';
 import { Button } from '../../../shared/button/button';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-modal',
@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 export class CartModal {
   readonly cartService = inject(CartService);
   readonly modalService = inject(ModalService);
-  private readonly router = inject(Router);
+  // private readonly router = inject(Router);
 
   readonly estimatedReadyTime = new Date(Date.now() + 30 * 60 * 1000);
 
@@ -28,10 +28,20 @@ export class CartModal {
     this.modalService.openCartItemEditor(cartItem, cartItem.menuItem);
   }
   checkout(): void {
+    // const isSignedIn = false; //replace with real auth state later
+
     if (this.cartService.cart().items.length === 0) {
       return;
     }
-    this.modalService.close();
-    this.router.navigate(['/checkout']);
+    this.modalService.openSignIn('checkout-flow');
+    // if (!isSignedIn) {
+    //   this.modalService.openSignIn('checkout-flow');
+    //   return;
+    // }
+    //navigate to checkout later
+
+    // maybe delete this.
+    // this.modalService.close();
+    // this.router.navigate(['/checkout']);
   }
 }

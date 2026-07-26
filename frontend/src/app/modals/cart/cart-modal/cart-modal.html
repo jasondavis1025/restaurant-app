@@ -68,7 +68,7 @@
   <div class="cart-modal__summary">
     <div class="cart-modal__summary-info">
       <span>{{ cartService.itemCount() }} item(s)</span>
-      <strong>Bag Total: {{ cartService.subtTotal() | currency: 'USD' }}</strong>
+      <strong>Bag Total: {{ cartService.subTotal() | currency: 'USD' }}</strong>
     </div>
     <div class="cart-modal__summary-buttons">
       <app-button variant="secondary" click="modalService.close()"> Add More Items </app-button>

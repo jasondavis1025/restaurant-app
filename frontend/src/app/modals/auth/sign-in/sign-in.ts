@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Button } from '../../../shared/button/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ModalService } from '../../../core/services/modal';
 
@@ -11,6 +11,7 @@ import { ModalService } from '../../../core/services/modal';
   styleUrl: './sign-in.scss',
 })
 export class SignIn {
+  private readonly router = inject(Router);
   readonly modalService = inject(ModalService);
   private readonly formBuilder = inject(FormBuilder);
   submitted = false;
@@ -34,5 +35,11 @@ export class SignIn {
 
     console.log(formData);
     // this.modalService.close();
+  }
+  continueAsGuest(): void {
+    if (this.modalService.authIntent() === 'checkout-flow') {
+      this.modalService.close();
+      this.router.navigate(['/checkout']);
+    }
   }
 }
