@@ -22,9 +22,17 @@ app-checkout-layout {
     padding: 2rem 3rem;
     display: block;
     background-color: var(--color-tertiary);
+    color: var(--color-white);
 }
 body {
     margin: 0;
+}
+p,
+div,
+input,
+span,
+label {
+    font-size: 1.125rem;
 }
 
 .visually-hidden {

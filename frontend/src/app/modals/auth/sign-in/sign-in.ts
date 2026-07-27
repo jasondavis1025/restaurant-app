@@ -19,6 +19,7 @@ export class SignIn {
     email: ['', [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)]],
     password: ['', Validators.required],
   });
+
   openSignUp(event: Event): void {
     event.stopPropagation();
     this.modalService.open('sign-up');

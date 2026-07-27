@@ -150,4 +150,7 @@
   <div class="sign-up__actions">
     <app-button type="submit" variant="secondary">Join Now</app-button>
   </div>
+  @if (signUpError()) {
+    <p class="sign-up__error">{{ signUpError() }}</p>
+  }
 </form>

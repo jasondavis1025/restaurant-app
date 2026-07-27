@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Button } from '../../../shared/button/button';
 import { ModalService } from '../../../core/services/modal';
+import { AuthService } from '../../../core/services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,6 +14,10 @@ import { ModalService } from '../../../core/services/modal';
 export class SignUp {
   readonly modalService = inject(ModalService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  readonly signUpError = signal<string | null>(null);
+
   submitted = false;
   readonly signUpForm = this.formBuilder.nonNullable.group({
     firstName: ['', Validators.required],
@@ -54,18 +60,48 @@ export class SignUp {
 
   join(): void {
     this.submitted = true;
+    this.signUpError.set(null);
     console.log('this.signUpForm.invalid:', this.signUpForm.invalid);
+
     if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
       return;
     }
 
-    const formData = this.signUpForm.getRawValue();
-    const payload = {
-      ...formData,
-      phone: formData.phone.replace(/\D/g, ''),
-    };
-    console.log(payload);
-    // this.modalService.close();
+    const { firstName, lastName, email, password, phone, birthday, zipCode } =
+      this.signUpForm.getRawValue();
+
+    this.authService
+      .signUp({
+        firstName,
+        lastName,
+        email,
+        password,
+        phone: phone.replace(/\D/g, ''),
+        birthday,
+        zipCode,
+      })
+      .subscribe({
+        next: (customer) => {
+          console.log('Account created:', customer);
+          this.authService.currentCustomer.set(customer);
+
+          if (this.modalService.authIntent() === 'checkout-flow') {
+            this.modalService.close();
+            this.router.navigate(['/checkout']);
+            return;
+          }
+          this.modalService.close();
+        },
+        error: (error) => {
+          console.error('Signup failed:', error);
+          if (error.status === 409) {
+            this.signUpError.set('An accout with that email already exists.');
+            return;
+          }
+
+          this.signUpError.set('Unable to create your account. Please try again.');
+        },
+      });
   }
 }

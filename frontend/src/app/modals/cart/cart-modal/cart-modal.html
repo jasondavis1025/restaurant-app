@@ -71,8 +71,10 @@
       <strong>Bag Total: {{ cartService.subTotal() | currency: 'USD' }}</strong>
     </div>
     <div class="cart-modal__summary-buttons">
-      <app-button variant="secondary" click="modalService.close()"> Add More Items </app-button>
-      <app-button (click)="checkout()"> Checkout </app-button>
+      <app-button variant="secondary" click="modalService.close()" width="200px">
+        Add More Items
+      </app-button>
+      <app-button (click)="checkout()" width="200px"> Checkout </app-button>
     </div>
   </div>
 </section>

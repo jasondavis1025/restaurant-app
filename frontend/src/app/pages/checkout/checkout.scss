@@ -47,6 +47,7 @@
     border-radius: .5rem;
     box-shadow: none;
     max-width: 10rem;
+    color: var(--color-white);
 }
 
 
@@ -73,7 +74,8 @@
     padding: 0;
     background: none;
     border: none;
-    text-decoration: underline; 
+    text-decoration: underline;
+    color: var(--color-white);
 }
 
 .checkout__order-items {
@@ -128,6 +130,7 @@
     border: none;
     text-align: left;
     cursor: pointer;
+    color: var(--color-white);
 }
 
 .checkout__payment-icon {

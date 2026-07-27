@@ -9,4 +9,6 @@ import { Component, input } from '@angular/core';
 export class Button {
   readonly variant = input<'primary' | 'secondary' | 'account'>('primary');
   readonly type = input<'button' | 'submit'>('button');
+  readonly width = input('150px');
+  readonly height = input('50px');
 }
