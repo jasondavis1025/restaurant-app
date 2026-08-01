@@ -2,7 +2,9 @@ import type { Request, Response } from "express";
 import {
   createCustomerAccount,
   authenticateCustomer,
+  getCustomerByUserId,
 } from "../services/auth.service.js";
+import { error } from "node:console";
 
 export async function signUp(req: Request, res: Response) {
   try {
@@ -76,6 +78,7 @@ export async function signIn(req: Request, res: Response): Promise<void> {
       });
       return;
     }
+    req.session.userId = customer.userId;
 
     res.status(200).json(customer);
   } catch (error) {
@@ -85,4 +88,53 @@ export async function signIn(req: Request, res: Response): Promise<void> {
       message: "Unable to sign in",
     });
   }
+}
+
+export async function getCurrentUser(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      res.status(401).json({
+        message: "Not authenticated!",
+      });
+      return;
+    }
+
+    const customer = await getCustomerByUserId(userId);
+
+    if (!customer) {
+      res.status(401).json({
+        message: "Not authenticated!",
+      });
+      return;
+    }
+    res.set("Cache-Control", "no-store");
+    res.status(200).json(customer);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Unable to retrieve current user",
+    });
+  }
+}
+
+export function signOut(req: Request, res: Response): void {
+  req.session.destroy((error) => {
+    if (error) {
+      console.error(error);
+
+      res.status(500).json({
+        message: "Unable to sign out",
+      });
+      return;
+    }
+
+    res.clearCookie("connect.sid");
+    res.status(204).send();
+  });
 }

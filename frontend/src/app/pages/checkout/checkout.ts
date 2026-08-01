@@ -4,6 +4,7 @@ import { CartService } from '../../core/services/cart';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Button } from '../../shared/button/button';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-checkout',
@@ -14,27 +15,35 @@ import { Button } from '../../shared/button/button';
 export class Checkout {
   private readonly router = inject(Router);
   readonly cartService = inject(CartService);
+  readonly authService = inject(AuthService);
 
   readonly pickupDates = this.createPickupDates();
   readonly selectedPickupDate = signal(this.pickupDates[0]);
 
   readonly isEditingContact = signal(true);
   readonly paymentExpanded = signal(true);
-
+  readonly currentCustomer = computed(() => this.authService.currentCustomer());
   readonly name = signal('');
   readonly phone = signal('');
   readonly email = signal('');
-
   readonly taxRate = 0.0825;
-
   readonly tax = computed(() => this.cartService.subTotal() * this.taxRate);
-
   readonly total = computed(() => this.cartService.subTotal() + this.tax());
 
   constructor() {
     if (this.cartService.cart().items.length === 0) {
-      this.router.navigate(['./menu']);
+      this.router.navigate(['/menu']);
+      return;
     }
+    const customer = this.currentCustomer();
+    if (!customer) {
+      return;
+    }
+    this.name.set(`${customer.firstName} ${customer.lastName}`);
+    this.phone.set(customer.phone ?? '');
+    this.email.set(customer.email);
+
+    this.isEditingContact.set(false);
   }
 
   toggleContactEdit(): void {

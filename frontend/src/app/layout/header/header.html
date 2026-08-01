@@ -17,9 +17,28 @@
   </nav>
   <div class="header__actions">
     <fa-icon [icon]="faBagShopping"></fa-icon>
-    <app-button variant="account" (click)="modalService.open('sign-in')">
-      <img src="/icons/person.svg" alt="" />
-      <span>Sign In/Join</span>
-    </app-button>
+    @if (authService.currentCustomer(); as customer) {
+      <div class="account-menu">
+        <button class="account-button" type="button" (click)="toggleAccountMenu()">
+          <fa-icon [icon]="faUser"></fa-icon>
+          <span>{{ customer.firstName }}</span>
+        </button>
+
+        @if (accountMenuOpen()) {
+          <div class="account-menu__dropdown">
+            <button type="button">My Account</button>
+            <button type="button">Order History</button>
+            <button class="account-menu__signout" type="button" (click)="signOut()">
+              Sign Out
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <app-button variant="account" (click)="modalService.open('sign-in')">
+        <fa-icon [icon]="faUser"></fa-icon>
+        <span>Sign In/Join</span>
+      </app-button>
+    }
   </div>
 </header>

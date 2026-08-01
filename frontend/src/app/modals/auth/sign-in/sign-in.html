@@ -47,6 +47,9 @@
     <app-button type="submit">Sign In</app-button>
     <app-button type="button" variant="account" (click)="openSignUp($event)">Join Now</app-button>
   </div>
+  @if (signInError()) {
+    <p class="sign-in__error">{{ signInError() }}</p>
+  }
   <button type="button" class="sign-in-modal__guest" (click)="continueAsGuest()">
     Continue as guest?
   </button>

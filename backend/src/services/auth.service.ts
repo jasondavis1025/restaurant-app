@@ -90,7 +90,7 @@ export async function authenticateCustomer(email: string, password: string) {
             SELECT
                 users.id AS user_id,
                 users.email,
-                user.password_has,
+                users.password_hash,
                 users.role,
                 users.is_active,
                 customers.id AS customer_id,
@@ -101,7 +101,7 @@ export async function authenticateCustomer(email: string, password: string) {
                 customers.zip_code
             FROM users
             JOIN customers
-                ON customers.use_id = users.id
+                ON customers.user_id = users.id
             WHERE users.email = $1
         `,
     [email],
@@ -129,5 +129,45 @@ export async function authenticateCustomer(email: string, password: string) {
     phone: account.phone,
     birthday: account.birthday,
     zipCode: account.zip_code,
+  };
+}
+
+export async function getCustomerByUserId(userId: string) {
+  const result = await pool.query(
+    `
+            SELECT
+                users.id AS user_id,
+                users.email,
+                users.role, 
+                customers.id AS customer_id,
+                customers.first_name,
+                customers.last_name,
+                customers.phone,
+                customers.birthday,
+                customers.zip_code
+            FROM users
+            JOIN customers
+                ON customers.user_id = users.id
+            WHERE users.id = $1
+        `,
+    [userId],
+  );
+
+  const customer = result.rows[0];
+
+  if (!customer) {
+    return null;
+  }
+
+  return {
+    userId: customer.user_id,
+    customerId: customer.customer_id,
+    email: customer.email,
+    role: customer.role,
+    firstName: customer.first_name,
+    lastName: customer.last_name,
+    phone: customer.phone,
+    birthday: customer.birthday,
+    zipCode: customer.zip_code,
   };
 }

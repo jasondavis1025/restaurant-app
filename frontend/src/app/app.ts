@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ModalHost } from './shared/modal-host/modal-host';
+import { AuthService } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,9 @@ import { ModalHost } from './shared/modal-host/modal-host';
 })
 export class App {
   protected readonly title = signal('client');
+  private readonly authService = inject(AuthService);
+
+  constructor() {
+    this.authService.loadCurrentUser();
+  }
 }

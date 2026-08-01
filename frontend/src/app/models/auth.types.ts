@@ -18,3 +18,7 @@ export interface AuthCustomer {
   birthday: string;
   zipCode: string;
 }
+export interface SignInRequest {
+  email: string;
+  password: string;
+}
