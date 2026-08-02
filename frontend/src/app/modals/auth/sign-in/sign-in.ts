@@ -52,6 +52,7 @@ export class SignIn {
             this.router.navigate(['/checkout']);
             return;
           }
+          this.modalService.close();
         },
         error: (error) => {
           if (error.status === 401) {

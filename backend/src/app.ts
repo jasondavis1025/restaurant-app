@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { healthRouter } from "./routes/health.routes.js";
 import { menuRouter } from "./routes/menu.routes.js";
+import { orderRouter } from "./routes/order.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
@@ -38,3 +39,4 @@ app.use(
 app.use("/api/health", healthRouter);
 app.use("/api/menu", menuRouter);
 app.use("/api/auth", authRoutes);
+app.use("/api/orders", orderRouter);

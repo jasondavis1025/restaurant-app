@@ -11,4 +11,5 @@ export class Button {
   readonly type = input<'button' | 'submit'>('button');
   readonly width = input('150px');
   readonly height = input('50px');
+  readonly disabled = input(false);
 }

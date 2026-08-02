@@ -5,6 +5,8 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Button } from '../../shared/button/button';
 import { AuthService } from '../../core/services/auth';
+import { CreateOrderRequest } from '../../models/order.types';
+import { OrderService } from '../../core/services/order';
 
 @Component({
   selector: 'app-checkout',
@@ -16,6 +18,7 @@ export class Checkout {
   private readonly router = inject(Router);
   readonly cartService = inject(CartService);
   readonly authService = inject(AuthService);
+  readonly orderService = inject(OrderService);
 
   readonly pickupDates = this.createPickupDates();
   readonly selectedPickupDate = signal(this.pickupDates[0]);
@@ -30,6 +33,8 @@ export class Checkout {
   readonly tax = computed(() => this.cartService.subTotal() * this.taxRate);
   readonly total = computed(() => this.cartService.subTotal() + this.tax());
 
+  readonly isSubmittingOrder = signal(false);
+  readonly orderError = signal<string | null>(null);
   constructor() {
     if (this.cartService.cart().items.length === 0) {
       this.router.navigate(['/menu']);
@@ -87,6 +92,58 @@ export class Checkout {
       date.setDate(today.getDate() + index);
 
       return date;
+    });
+  }
+
+  placeOrder(): void {
+    if (this.isSubmittingOrder()) {
+      return;
+    }
+
+    this.orderError.set(null);
+
+    const customerName = this.name().trim();
+    const customerPhone = this.phone().trim();
+    const customerEmail = this.email().trim();
+
+    if (!customerName || !customerPhone || !customerEmail) {
+      this.orderError.set('Please complete your contact information');
+      this.isEditingContact.set(true);
+      return;
+    }
+
+    this.isSubmittingOrder.set(true);
+
+    const payload: CreateOrderRequest = {
+      customerName,
+      customerPhone,
+      customerEmail,
+      orderType: 'pickup',
+      scheduledFor: this.selectedPickupDate().toISOString(),
+      items: this.cartService.cart().items.map((item) => ({
+        menuItemId: item.menuItemId,
+        quantity: item.quantity,
+        additionalInstructions: item.additionalInstructions,
+        modifiers: item.customizations.map((customization) => ({
+          customizationId: customization.id,
+        })),
+      })),
+    };
+
+    this.orderService.createOrder(payload).subscribe({
+      next: (order) => {
+        this.isSubmittingOrder.set(false);
+        this.orderError.set(null);
+
+        this.cartService.clearCart();
+        this.router.navigate(['/confirmation', order.id]);
+      },
+      error: (error) => {
+        this.isSubmittingOrder.set(false);
+        this.orderError.set(
+          error.error?.message ?? 'Unable to place your order. Please try again.',
+        );
+      },
     });
   }
 }

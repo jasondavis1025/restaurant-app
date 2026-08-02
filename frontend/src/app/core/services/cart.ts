@@ -98,4 +98,11 @@ export class CartService {
       };
     });
   }
+
+  clearCart(): void {
+    this.cart.set({
+      menuSlug: null,
+      items: [],
+    });
+  }
 }

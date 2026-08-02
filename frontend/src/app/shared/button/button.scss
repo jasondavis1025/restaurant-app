@@ -15,6 +15,10 @@ button {
     justify-content: center;
     gap: .5rem;
 }
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
 @media (max-width: 768px) {
     button {

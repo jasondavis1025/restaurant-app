@@ -128,5 +128,5 @@
       </div>
     }
   </section>
-  <app-button>Place Order</app-button>
+  <app-button [disabled]="isSubmittingOrder()" (click)="placeOrder()">Place Order</app-button>
 </main>
