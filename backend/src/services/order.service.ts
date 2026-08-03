@@ -36,6 +36,31 @@ interface CustomizationRow {
   price_adjustment: string;
 }
 
+interface OrderDetailsRow {
+  order_id: string;
+  status: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_email: string;
+  scheduled_for: string;
+  subtotal: string;
+  tax: string;
+  total: string;
+
+  order_item_id: string | null;
+  menu_item_id: string | null;
+  item_name: string | null;
+  quantity: number | null;
+  unit_price: string | null;
+  line_total: string | null;
+  additional_instructions: string | null;
+
+  modifier_id: string | null;
+  ingredient_name: string | null;
+  modifier_type: string | null;
+  price_adjustment: string | null;
+}
+
 export async function createOrderRecord({
   userId,
   customerName,
@@ -45,6 +70,10 @@ export async function createOrderRecord({
   scheduledFor,
   items,
 }: CreateOrderInput) {
+  customerName = customerName.trim();
+  customerPhone = customerPhone.trim();
+  customerEmail = customerEmail.trim();
+
   const client = await pool.connect();
 
   try {
@@ -222,16 +251,119 @@ export async function createOrderRecord({
     const tax = fromCents(taxCents);
     const total = fromCents(totalCents);
 
+    // Temporary value until checkout has a real address to work with.
+    const locationId = "1";
+
+    const orderResult = await client.query<{
+      id: string;
+      status: string;
+      scheduled_for: string;
+    }>(
+      `
+            INSERT INTO orders (
+                location_id,
+                customer_id,
+                customer_name,
+                customer_phone,
+                customer_email,
+                status,
+                order_type,
+                subtotal,
+                tax,
+                total,
+                scheduled_for
+            )
+            VALUES (
+                $1, $2, $3, $4, $5, 'pending', $6, $7, $8, $9, $10
+            )
+            RETURNING
+                id, status, scheduled_for
+        `,
+      [
+        locationId,
+        customerId,
+        customerName,
+        customerPhone,
+        customerEmail,
+        orderType,
+        subtotal,
+        tax,
+        total,
+        scheduledFor,
+      ],
+    );
+    const order = orderResult.rows[0];
+
+    if (!order) {
+      throw new Error("Failed to create order");
+    }
+    //temporary method for getting 20 minute estimate. to be updated later
+    const estimatedReadyAt = new Date(order.scheduled_for);
+    estimatedReadyAt.setMinutes(estimatedReadyAt.getMinutes() + 20);
+
+    for (const item of validatedItems) {
+      const orderItemResult = await client.query<{ id: string }>(
+        `
+                INSERT INTO order_items (
+                    order_id, menu_item_id, item_name, item_description, quantity,
+                    unit_price, base_price, modifier_total, line_total, additional_instructions
+                )
+                VALUES (
+                    $1, $2, $3, $4, $5, 
+                    $6, $7, $8, $9, $10
+                )
+                RETURNING id
+            `,
+        [
+          order.id,
+          item.menuItemId,
+          item.itemName,
+          item.itemDescription,
+          item.quantity,
+          fromCents(item.unitPriceCents),
+          fromCents(item.basePriceCents),
+          fromCents(item.modifierTotalCents),
+          fromCents(item.lineTotalCents),
+          item.additionalInstructions || null,
+        ],
+      );
+      const orderItem = orderItemResult.rows[0];
+
+      if (!orderItem) {
+        throw new Error("Failed to create order item");
+      }
+
+      for (const modifier of item.modifiers) {
+        await client.query(
+          `
+                    INSERT INTO order_item_modifiers (
+                        order_item_id, ingredient_id, ingredient_name, modifier_type, price_adjustment
+                    )
+                    VALUES ($1, $2, $3, $4, $5)
+                `,
+          [
+            orderItem.id,
+            modifier.ingredientId,
+            modifier.ingredientName,
+            modifier.modifierType,
+            fromCents(modifier.priceAdjustmentCents),
+          ],
+        );
+      }
+    }
+
     await client.query("COMMIT");
 
     return {
+      id: order.id,
       customerId,
       customerName,
       customerPhone,
       customerEmail,
       orderType,
-      scheduledFor,
-      status: "pending",
+      scheduledFor: order.scheduled_for,
+      estimatedReadyAt: estimatedReadyAt.toISOString(),
+      status: order.status,
       items: validatedItems.map((item) => ({
         menuItemId: item.menuItemId,
         itemName: item.itemName,
@@ -243,7 +375,7 @@ export async function createOrderRecord({
         lineTotal: fromCents(item.lineTotalCents),
         additionalInstructions: item.additionalInstructions,
         modifiers: item.modifiers.map((modifier) => ({
-          customizationId: modifier.customizationId,
+          id: modifier.customizationId,
           ingredientId: modifier.ingredientId,
           ingredientName: modifier.ingredientName,
           modifierType: modifier.modifierType,
@@ -268,4 +400,111 @@ function dollarsToCents(value: string | number): number {
 
 function fromCents(value: number): number {
   return value / 100;
+}
+
+export async function getOrderById(orderId: string) {
+  const result = await pool.query<OrderDetailsRow>(
+    `
+            SELECT
+            o.id AS order_id, o.status, o.customer_name, o.customer_phone, o.customer_email, o.scheduled_for, 
+            o.subtotal, o.tax, o.total,
+            
+            oi.id AS order_item_id, oi.menu_item_id, oi.item_name, oi.quantity, oi.unit_price, oi.line_total,
+            oi.additional_instructions,
+
+            oim.id AS modifier_id, oim.ingredient_name, oim.modifier_type, oim.price_adjustment
+
+            FROM orders o
+
+            LEFT JOIN order_items oi 
+                ON oi.order_id = o.id
+            LEFT JOIN order_item_modifiers oim
+                ON oim.order_item_id = oi.id
+
+            WHERE o.id = $1
+
+            ORDER BY
+                oi.id,
+                oim.id
+        `,
+    [orderId],
+  );
+
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  const firstRow = result.rows[0];
+
+  const itemsById = new Map<
+    string,
+    {
+      orderItemId: string;
+      menuItemId: string;
+      itemName: string;
+      quantity: number;
+      unitPrice: number;
+      lineTotal: number;
+      additionalInstructions: string | null;
+      modifiers: {
+        id: string;
+        ingredientName: string;
+        modifierType: string;
+        priceAdjustment: number;
+      }[];
+    }
+  >();
+
+  for (const row of result.rows) {
+    if (!row.order_item_id || !row.menu_item_id || !row.item_name) {
+      continue;
+    }
+
+    if (!itemsById.has(row.order_item_id)) {
+      itemsById.set(row.order_item_id, {
+        orderItemId: row.order_item_id,
+        menuItemId: row.menu_item_id,
+        itemName: row.item_name,
+        quantity: row.quantity ?? 0,
+        unitPrice: Number(row.unit_price ?? 0),
+        lineTotal: Number(row.line_total ?? 0),
+        additionalInstructions: row.additional_instructions,
+        modifiers: [],
+      });
+    }
+
+    const item = itemsById.get(row.order_item_id)!;
+
+    if (
+      row.modifier_id &&
+      row.ingredient_name &&
+      row.modifier_type &&
+      row.price_adjustment !== null
+    ) {
+      item.modifiers.push({
+        id: row.modifier_id,
+        ingredientName: row.ingredient_name,
+        modifierType: row.modifier_type,
+        priceAdjustment: Number(row.price_adjustment),
+      });
+    }
+  }
+
+  //temporary method for getting 20 minute estimate. to be updated later
+  const estimatedReadyAt = new Date(firstRow.scheduled_for);
+  estimatedReadyAt.setMinutes(estimatedReadyAt.getMinutes() + 20);
+
+  return {
+    id: firstRow.order_id,
+    status: firstRow.status,
+    customerName: firstRow.customer_name,
+    customerPhone: firstRow.customer_phone,
+    customerEmail: firstRow.customer_email,
+    scheduledFor: firstRow.scheduled_for,
+    items: Array.from(itemsById.values()),
+    subtotal: Number(firstRow.subtotal),
+    tax: Number(firstRow.tax),
+    total: Number(firstRow.total),
+    estimatedReadyAt: estimatedReadyAt.toISOString(),
+  };
 }

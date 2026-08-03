@@ -24,7 +24,27 @@ export interface CreatedOrder {
   customerEmail: string;
   customerPhone: string;
   scheduledFor: string;
+  estimatedReadyAt: string;
+  items: CreatedOrderItem[];
   subtotal: number;
   tax: number;
   total: number;
+}
+
+export interface CreatedOrderItem {
+  orderItemId: string;
+  menuItemId: string;
+  itemName: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+  additionalInstructions: string | null;
+  modifiers: CreatedOrderModifier[];
+}
+
+export interface CreatedOrderModifier {
+  id: string;
+  ingredientName: string;
+  modifierType: string;
+  priceAdjustment: number;
 }

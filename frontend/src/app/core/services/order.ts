@@ -13,4 +13,10 @@ export class OrderService {
       withCredentials: true,
     });
   }
+
+  getOrder(orderId: string): Observable<CreatedOrder> {
+    return this.http.get<CreatedOrder>(`${environment.apiUrl}/orders/${orderId}`, {
+      withCredentials: true,
+    });
+  }
 }

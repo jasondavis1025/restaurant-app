@@ -1,1 +1,73 @@
-<p>confirmation works!</p>
+<main class="confirmation">
+  @if (isLoading()) {
+    <p>Loading your order...</p>
+  } @else if (orderError()) {
+    <p>{{ orderError() }}</p>
+  } @else if (order(); as order) {
+    <header class="confirmation__header">
+      <a routerLink="/" class="confirmation__brand">
+        <span class="confirmation__logo" aria-hidden="true"></span>
+        <span>Cafe Samui</span>
+      </a>
+
+      <button class="confirmation__account" type="button" aria-label="Open account menu">
+        account icon here
+      </button>
+    </header>
+
+    <section class="confirmation__status">
+      <div class="confirmation__status-icon" aria-hidden="true">✓</div>
+
+      <h1>We've received your order!</h1>
+      <p class="confirmation__pickup-time">
+        Estimated pickup: {{ order.estimatedReadyAt | date: 'h:mm a' }}
+      </p>
+
+      <address class="confirmation__address">
+        Cafe Samui<br />
+        Pickup location coming soon
+      </address>
+    </section>
+
+    <section class="confirmation__summary">
+      <h2>Order Summary</h2>
+
+      <div class="confirmation__items">
+        @for (item of order.items; track item.menuItemId) {
+          <article class="confirmation__item">
+            <div class="confirmation__item-info">
+              <p>
+                <span>{{ item.quantity }}</span>
+                <span>{{ item.itemName }}</span>
+              </p>
+
+              @for (modifier of item.modifiers; track modifier.id) {
+                <small>{{ modifier.ingredientName }}</small>
+              }
+
+              @if (item.additionalInstructions) {
+                <small>{{ item.additionalInstructions }}</small>
+              }
+            </div>
+            <span>{{ item.unitPrice | currency }} ea</span>
+          </article>
+        }
+      </div>
+
+      <div class="confirmation__totals">
+        <div>
+          <span>Subtotal</span>
+          <span>{{ order.subtotal | currency }}</span>
+        </div>
+        <div>
+          <span>Tax</span>
+          <span>{{ order.tax | currency }}</span>
+        </div>
+        <div class="confirmation__total">
+          <span>Total</span>
+          <span>{{ order.total | currency }}</span>
+        </div>
+      </div>
+    </section>
+  }
+</main>
