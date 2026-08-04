@@ -52,6 +52,14 @@ export async function getOrderById(
 ): Promise<void> {
   try {
     const { orderId } = req.params;
+    const userId = req.session.userId;
+
+    if (!userId) {
+      res.status(401).json({
+        message: "Authentication required",
+      });
+      return;
+    }
 
     if (!orderId) {
       res.status(400).json({
@@ -60,7 +68,7 @@ export async function getOrderById(
       return;
     }
 
-    const order = await getOrderByIdRecord(orderId);
+    const order = await getOrderByIdRecord(orderId, userId);
 
     if (!order) {
       res.status(404).json({

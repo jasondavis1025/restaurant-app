@@ -402,7 +402,7 @@ function fromCents(value: number): number {
   return value / 100;
 }
 
-export async function getOrderById(orderId: string) {
+export async function getOrderById(orderId: string, userId: string) {
   const result = await pool.query<OrderDetailsRow>(
     `
             SELECT
@@ -416,18 +416,21 @@ export async function getOrderById(orderId: string) {
 
             FROM orders o
 
+            JOIN customers c
+                ON c.id = o.customer_id
             LEFT JOIN order_items oi 
                 ON oi.order_id = o.id
             LEFT JOIN order_item_modifiers oim
                 ON oim.order_item_id = oi.id
 
             WHERE o.id = $1
+                AND c.user_id = $2
 
             ORDER BY
                 oi.id,
                 oim.id
         `,
-    [orderId],
+    [orderId, userId],
   );
 
   if (result.rows.length === 0) {
