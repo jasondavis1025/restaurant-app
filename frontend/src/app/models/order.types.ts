@@ -29,6 +29,7 @@ export interface CreatedOrder {
   subtotal: number;
   tax: number;
   total: number;
+  guestAccessToken: string | null;
 }
 
 export interface CreatedOrderItem {

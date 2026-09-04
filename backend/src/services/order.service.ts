@@ -1,4 +1,5 @@
 import { pool } from "../config/database.js";
+import { randomBytes } from "node:crypto";
 
 interface CreateOrderModifierInput {
   customizationId: string;
@@ -254,10 +255,14 @@ export async function createOrderRecord({
     // Temporary value until checkout has a real address to work with.
     const locationId = "1";
 
+    //For guest checkout, will generate a long, cryptographically random token and null for authenticated users.
+    const guestAccessToken = userId ? null : randomBytes(32).toString("hex");
+
     const orderResult = await client.query<{
       id: string;
       status: string;
       scheduled_for: string;
+      guest_access_token: string | null;
     }>(
       `
             INSERT INTO orders (
@@ -271,13 +276,14 @@ export async function createOrderRecord({
                 subtotal,
                 tax,
                 total,
-                scheduled_for
+                scheduled_for,
+                guest_access_token
             )
             VALUES (
-                $1, $2, $3, $4, $5, 'pending', $6, $7, $8, $9, $10
+                $1, $2, $3, $4, $5, 'pending', $6, $7, $8, $9, $10, $11
             )
             RETURNING
-                id, status, scheduled_for
+                id, status, scheduled_for, guest_access_token
         `,
       [
         locationId,
@@ -290,6 +296,7 @@ export async function createOrderRecord({
         tax,
         total,
         scheduledFor,
+        guestAccessToken,
       ],
     );
     const order = orderResult.rows[0];
@@ -363,6 +370,7 @@ export async function createOrderRecord({
       orderType,
       scheduledFor: order.scheduled_for,
       estimatedReadyAt: estimatedReadyAt.toISOString(),
+      guestAccessToken: order.guest_access_token,
       status: order.status,
       items: validatedItems.map((item) => ({
         menuItemId: item.menuItemId,
@@ -402,7 +410,11 @@ function fromCents(value: number): number {
   return value / 100;
 }
 
-export async function getOrderById(orderId: string, userId: string) {
+export async function getOrderById(
+  orderId: string,
+  userId: string | null,
+  guestAccessToken: string | null,
+) {
   const result = await pool.query<OrderDetailsRow>(
     `
             SELECT
@@ -416,7 +428,7 @@ export async function getOrderById(orderId: string, userId: string) {
 
             FROM orders o
 
-            JOIN customers c
+            LEFT JOIN customers c
                 ON c.id = o.customer_id
             LEFT JOIN order_items oi 
                 ON oi.order_id = o.id
@@ -424,13 +436,17 @@ export async function getOrderById(orderId: string, userId: string) {
                 ON oim.order_item_id = oi.id
 
             WHERE o.id = $1
-                AND c.user_id = $2
+                AND (
+                  ($2::bigint IS NOT NULL AND c.user_id = $2)
+                  OR
+                  ($3::text IS NOT NULL AND o.guest_access_token = $3)
+                )
 
             ORDER BY
                 oi.id,
                 oim.id
         `,
-    [orderId, userId],
+    [orderId, userId, guestAccessToken],
   );
 
   if (result.rows.length === 0) {

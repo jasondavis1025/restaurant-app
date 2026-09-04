@@ -14,9 +14,10 @@ export class OrderService {
     });
   }
 
-  getOrder(orderId: string): Observable<CreatedOrder> {
+  getOrder(orderId: string, guestAccessToken?: string | null): Observable<CreatedOrder> {
     return this.http.get<CreatedOrder>(`${environment.apiUrl}/orders/${orderId}`, {
       withCredentials: true,
+      ...(guestAccessToken ? { params: { guestAccessToken } } : {}),
     });
   }
 }

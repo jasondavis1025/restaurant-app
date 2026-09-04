@@ -136,9 +136,12 @@ export class Checkout {
         this.orderError.set(null);
 
         this.cartService.clearCart();
-        this.router.navigate(['/confirmation', order.id]);
+        this.router.navigate(['/confirmation', order.id], {
+          queryParams: order.guestAccessToken ? { guestAccessToken: order.guestAccessToken } : {},
+        });
       },
       error: (error) => {
+        console.log('CREATE ORDER ERROR', error.status, error);
         this.isSubmittingOrder.set(false);
         this.orderError.set(
           error.error?.message ?? 'Unable to place your order. Please try again.',

@@ -25,7 +25,9 @@ export class Header {
   toggleAccountMenu(): void {
     this.accountMenuOpen.update((open) => !open);
   }
-
+  openCart() {
+    this.modalService.open('cart');
+  }
   signOut(): void {
     this.authService.signOut().subscribe({
       next: () => {

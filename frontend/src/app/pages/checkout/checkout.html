@@ -129,4 +129,7 @@
     }
   </section>
   <app-button [disabled]="isSubmittingOrder()" (click)="placeOrder()">Place Order</app-button>
+  @if (orderError()) {
+    <p>{{ orderError() }}</p>
+  }
 </main>

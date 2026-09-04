@@ -52,9 +52,13 @@ export async function getOrderById(
 ): Promise<void> {
   try {
     const { orderId } = req.params;
-    const userId = req.session.userId;
+    const userId = req.session.userId ?? null;
 
-    if (!userId) {
+    const guestAccessToken =
+      typeof req.query.guestAccessToken === "string"
+        ? req.query.guestAccessToken
+        : null;
+    if (!userId && !guestAccessToken) {
       res.status(401).json({
         message: "Authentication required",
       });
@@ -68,7 +72,7 @@ export async function getOrderById(
       return;
     }
 
-    const order = await getOrderByIdRecord(orderId, userId);
+    const order = await getOrderByIdRecord(orderId, userId, guestAccessToken);
 
     if (!order) {
       res.status(404).json({

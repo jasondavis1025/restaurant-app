@@ -23,6 +23,7 @@ export class Confirmation {
 
   constructor() {
     const orderId = this.route.snapshot.paramMap.get('orderId');
+    const guestAccessToken = this.route.snapshot.queryParamMap.get('guestAccessToken');
 
     if (!orderId) {
       this.isLoading.set(false);
@@ -30,7 +31,7 @@ export class Confirmation {
       return;
     }
 
-    this.orderService.getOrder(orderId).subscribe({
+    this.orderService.getOrder(orderId, guestAccessToken).subscribe({
       next: (order) => {
         this.order.set(order);
       },
@@ -38,7 +39,9 @@ export class Confirmation {
         this.isLoading.set(false);
 
         if (error.status === 401) {
+          console.log('this.handleUnauthorized();');
           this.handleUnauthorized();
+          return;
         }
 
         if (error.status === 404) {
