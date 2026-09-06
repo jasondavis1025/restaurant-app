@@ -27,6 +27,9 @@ export class ModalService {
     this.selectedMenuItem.set(null);
     this.editingCartItem.set(null);
   }
+  resetAuthIntent() {
+    this.authIntent.set('default');
+  }
 
   openCartItemEditor(cartItem: CartItem, menuItem: MenuItemModel): void {
     this.selectedMenuItem.set(menuItem);

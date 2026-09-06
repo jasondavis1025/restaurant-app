@@ -36,7 +36,6 @@ async function seed(): Promise<void> {
     );
     const morningMenuId = morningMenu.rows[0].id;
     const lateNightMenuId = lateNightMenu.rows[0].id;
-    console.log({ morningMenuId, lateNightMenuId });
 
     const savoryEats = await client.query<{ id: string }>(
       `

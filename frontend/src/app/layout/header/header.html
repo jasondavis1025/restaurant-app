@@ -1,9 +1,12 @@
 <header class="header">
   <a class="header__brand" routerLink="/">
-    <fa-icon [icon]="faUtensils"></fa-icon>
-    <span class="header__name">Cafe Samui</span>
+    <img
+      src="https://res.cloudinary.com/zo058cum/image/upload/w_400,c_fill,q_auto,f_auto/v1788734822/Cafe_Samui_LOGO_PNG_COLOR_tk3ozy.png"
+      alt="Cafe Samui"
+      class="header__logo"
+    />
   </a>
-  <nav class="header_nav">
+  <nav class="header__nav">
     <a class="header__nav-link" routerLink="/menu" routerLinkActive="header__nav-link--active"
       >Menu</a
     >
@@ -16,11 +19,19 @@
     <app-button routerLink="/menu">Order Now</app-button>
   </nav>
   <div class="header__actions">
-    <fa-icon [icon]="faBagShopping" (click)="openCart()"></fa-icon>
+    <div class="account-menu">
+      <button class="account-button">
+        <fa-icon
+          [icon]="faBagShopping"
+          (click)="openCart()"
+          class="header__action-buttons"
+        ></fa-icon>
+      </button>
+    </div>
     @if (authService.currentCustomer(); as customer) {
       <div class="account-menu">
         <button class="account-button" type="button" (click)="toggleAccountMenu()">
-          <fa-icon [icon]="faUser"></fa-icon>
+          <fa-icon [icon]="faUser" class="header__action-buttons"></fa-icon>
           <span>{{ customer.firstName }}</span>
         </button>
 
@@ -35,10 +46,10 @@
         }
       </div>
     } @else {
-      <app-button variant="account" (click)="modalService.open('sign-in')">
-        <fa-icon [icon]="faUser"></fa-icon>
+      <button class="account-button" (click)="modalService.open('sign-in')">
+        <fa-icon [icon]="faUser" class="header__action-button"></fa-icon>
         <span>Sign In/Join</span>
-      </app-button>
+      </button>
     }
   </div>
 </header>

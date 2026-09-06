@@ -30,7 +30,6 @@ export class SignIn {
   signIn(): void {
     this.signInError.set(null);
     this.submitted = true;
-    console.log('this.signInForm.invalid:', this.signInForm.invalid);
     if (this.signInForm.invalid) {
       this.signInForm.markAllAsTouched();
       return;
@@ -49,6 +48,7 @@ export class SignIn {
 
           if (this.modalService.authIntent() === 'checkout-flow') {
             this.modalService.close();
+            this.modalService.resetAuthIntent();
             this.router.navigate(['/checkout']);
             return;
           }
@@ -67,6 +67,7 @@ export class SignIn {
   continueAsGuest(): void {
     if (this.modalService.authIntent() === 'checkout-flow') {
       this.modalService.close();
+      this.modalService.resetAuthIntent();
       this.router.navigate(['/checkout']);
     }
   }

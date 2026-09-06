@@ -50,7 +50,9 @@
   @if (signInError()) {
     <p class="sign-in__error">{{ signInError() }}</p>
   }
-  <button type="button" class="sign-in-modal__guest" (click)="continueAsGuest()">
-    Continue as guest?
-  </button>
+  @if (this.modalService.authIntent() === 'checkout-flow') {
+    <button type="button" class="sign-in-modal__guest" (click)="continueAsGuest()">
+      Continue as guest?
+    </button>
+  }
 </form>

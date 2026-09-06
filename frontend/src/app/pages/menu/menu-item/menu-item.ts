@@ -14,7 +14,6 @@ export class MenuItem {
   private readonly modalService = inject(ModalService);
 
   openDetails(): void {
-    console.log('openDetails()');
     this.modalService.openMenuItem(this.item());
   }
 }

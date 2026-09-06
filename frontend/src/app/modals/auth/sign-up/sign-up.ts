@@ -61,7 +61,6 @@ export class SignUp {
   join(): void {
     this.submitted = true;
     this.signUpError.set(null);
-    console.log('this.signUpForm.invalid:', this.signUpForm.invalid);
 
     if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
@@ -83,7 +82,6 @@ export class SignUp {
       })
       .subscribe({
         next: (customer) => {
-          console.log('Account created:', customer);
           this.authService.currentCustomer.set(customer);
 
           if (this.modalService.authIntent() === 'checkout-flow') {

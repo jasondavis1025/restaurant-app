@@ -135,11 +135,9 @@ export async function getMenu(_req: Request, res: Response): Promise<void> {
           categories: new Map(),
         });
       }
-      // console.log("menus", menus);
       //get the menu we're currently working with - something like id: 1, name 'morning cafe menu', categories: new map()
       const menu = menus.get(row.menu_id)!;
       // the ! is Typescript's non-null assertion operator
-      // console.log("menu", menu);
       //will prevent attempt to create a nonexistent category. Example of category: "Savory Eats"
       if (row.category_id && row.category_name) {
         //checking if category has already been created for current menu

@@ -39,7 +39,6 @@ export class Confirmation {
         this.isLoading.set(false);
 
         if (error.status === 401) {
-          console.log('this.handleUnauthorized();');
           this.handleUnauthorized();
           return;
         }

@@ -141,7 +141,6 @@ export class Checkout {
         });
       },
       error: (error) => {
-        console.log('CREATE ORDER ERROR', error.status, error);
         this.isSubmittingOrder.set(false);
         this.orderError.set(
           error.error?.message ?? 'Unable to place your order. Please try again.',

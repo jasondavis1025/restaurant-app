@@ -55,11 +55,7 @@ export class MenuItemModal {
     const editingItem = this.modalService.editingCartItem();
 
     if (!item) return;
-    console.log({
-      item,
-      customizations: this.selectedCustomizations(),
-      additionalInstructions: this.additionalInstructions,
-    });
+
     const customizedItem: CartItem = {
       cartItemId: crypto.randomUUID(),
       menuItemId: item.id,

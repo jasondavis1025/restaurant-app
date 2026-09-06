@@ -6,13 +6,6 @@
     margin-bottom: 3rem;
     margin-top: 1rem;
 }
-.header__name {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: 0.02em;
-    margin: 0;
-}
 .header__brand {
     display: flex;
     justify-self: start;
@@ -25,7 +18,7 @@
     display: flex;
     justify-self: center;
     align-items: center;
-    gap: .5rem;
+    gap: 1rem;
 }
 .header__actions {
     justify-self: end;
@@ -43,7 +36,7 @@
 
     min-width: 6rem;
     height: 2.5rem;
-    font-size: 1.25rem;
+    font-size: 1.75rem;
 
     color: var(--color-primary);
     text-decoration: none;
@@ -58,7 +51,7 @@
     content: '';
     position: absolute;
     
-    width: 2rem;
+    width: 3rem;
     height: 2px;
 
     bottom: .4rem;
@@ -77,6 +70,9 @@
 }
 .header_nav-link-last {
     margin-right: 20px;
+}
+.header__action-buttons {
+    font-size: 1.5rem !important;
 }
 fa-icon {
     display: flex;
@@ -97,13 +93,6 @@ fa-icon {
     color: inherit;
     cursor: pointer;
     transition: background-color 150ms ease, opacity 150ms ease;
-    fa-icon {
-        display: grid;
-        place-items: center;
-        font-size: 1.1rem;
-        background: transparent;
-
-    }
     &:hover {
         background-color: rgb(0 0 0 / 6%);
     }
