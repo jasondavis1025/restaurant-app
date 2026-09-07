@@ -15,3 +15,5 @@ npm-debug.log*
 .claude/worktrees
 .claude/settings.local.json
 .angular
+
+__screenshots__/
