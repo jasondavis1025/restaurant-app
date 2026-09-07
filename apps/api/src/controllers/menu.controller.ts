@@ -4,7 +4,7 @@ import { pool } from "../config/database.js";
 interface MenuRow {
   menu_id: string;
   menu_name: string;
-  menu_slug: string;
+  menu_slug: "morning" | "late-night";
   start_time: string;
   end_time: string;
   allows_preorder: boolean;

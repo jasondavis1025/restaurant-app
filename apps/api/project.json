@@ -1,0 +1,50 @@
+{
+    "name": "api",
+    "projectType": "application",
+    "sourceRoot": "apps/api/src",
+    "targets": {
+        "serve": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "apps/api",
+                "command": "npm run dev"
+            }
+        },
+        "build": {
+            "executor": "nx:run-commands",
+            "outputs": ["{projectRoot}/dist"],
+            "options": {
+                "cwd": "apps/api",
+                "command":"npm run build"            
+            }
+        },
+        "start": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "apps/api",
+                "command": "npm start"
+            }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "apps/api",
+                "command": "npm test"
+            }
+        },
+        "seed": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "apps/api",
+                "command": "npm run seed"
+            }
+        },
+        "migrate": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "apps/api",
+                "command": "npm run migrate"
+            }
+        }
+    }
+}

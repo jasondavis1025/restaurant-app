@@ -6,3 +6,12 @@
 **/.env.*
 !**/.env.example
 npm-debug.log*
+
+
+.nx/cache
+.nx/workspace-data
+.nx/migrate-runs
+.nx/polygraph
+.claude/worktrees
+.claude/settings.local.json
+.angular

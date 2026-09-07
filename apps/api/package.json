@@ -13,7 +13,8 @@
     "start": "node dist/server.js",
     "lint": "eslint src",
     "format": "prettier --write",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test" : "vitest run"
   },
   "keywords": [],
   "author": "",

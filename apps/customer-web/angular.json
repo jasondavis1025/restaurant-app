@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "client": {
+    "customer-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -60,10 +60,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "client:build:production"
+              "buildTarget": "customer-web:build:production"
             },
             "development": {
-              "buildTarget": "client:build:development"
+              "buildTarget": "customer-web:build:development"
             }
           },
           "defaultConfiguration": "development"
