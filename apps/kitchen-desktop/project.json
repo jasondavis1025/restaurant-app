@@ -50,6 +50,30 @@
         }
       }
     },
+    "electron-build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspace}/dist/kitchen-desktop/electron"],
+      "options": {
+        "command" : "tsc -p apps/kitchen-desktop/tsconfig.electron.json"
+      }
+    },
+    "electron": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["electron-build"],
+      "options": {
+        "commands": [
+          {
+            "command": "npx nx serve kitchen-desktop",
+            "forwardAllArgs": false
+          },
+          {
+            "command": "npx wait-on http://localhost:4201 && npx electron dist/kitchen-desktop/electron/main.js",
+            "forwardAllArgs": false
+          }
+        ],
+        "parallel": true
+      } 
+    },
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
@@ -61,6 +85,9 @@
         "development": {
           "buildTarget": "kitchen-desktop:build:development"
         }
+      },
+      "options": {
+        "port": 4201
       }
     },
     "lint": {

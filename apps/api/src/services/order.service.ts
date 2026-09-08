@@ -527,3 +527,28 @@ export async function getOrderById(
     estimatedReadyAt: estimatedReadyAt.toISOString(),
   };
 }
+
+export async function getKitchenOrders() {
+  const result = await pool.query<{
+    id: string;
+    status: string;
+    customer_name: string;
+    scheduled_for: string;
+    total: string;
+  }>(
+    `
+      SELECT id, status, customer_name, scheduled_for, total
+      FROM orders
+      WHERE status = 'pending'
+      ORDER BY scheduled_for ASC
+    `,
+  );
+
+  return result.rows.map((row) => ({
+    id: row.id,
+    status: row.status,
+    customerName: row.customer_name,
+    scheduledFor: row.scheduled_for,
+    total: Number(row.total),
+  }));
+}

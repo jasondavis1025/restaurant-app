@@ -13,7 +13,7 @@ const PgSession = connectPgSimple(session);
 
 app.use(
   cors({
-    origin: "http://localhost:4200",
+    origin: ["http://localhost:4200", "http://localhost:4201"],
     credentials: true,
   }),
 );

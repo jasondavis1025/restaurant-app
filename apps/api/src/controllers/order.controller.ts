@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   createOrderRecord,
   getOrderById as getOrderByIdRecord,
+  getKitchenOrders as getKitchenOrdersRecord,
 } from "../services/order.service.js";
 
 export async function createOrder(req: Request, res: Response): Promise<void> {
@@ -87,6 +88,23 @@ export async function getOrderById(
 
     res.status(500).json({
       message: "Failed to fetch order",
+    });
+  }
+}
+
+export async function getKitchenOrders(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  try {
+    const orders = await getKitchenOrdersRecord();
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching kitchen orders", error);
+
+    res.status(500).json({
+      message: "Failed to fetch kitchen orders",
     });
   }
 }
